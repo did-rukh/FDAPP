@@ -1,0 +1,85 @@
+
+/* ── CART ── */
+div[style*="border: 1px solid #ddd"] {
+  background: var(--card-bg) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 1rem 1.2rem !important;
+  box-shadow: var(--shadow-sm);
+  transition: var(--ease);
+  margin-bottom: 0.85rem;
+}
+
+div[style*="border: 1px solid #ddd"]:hover { box-shadow: var(--shadow-md); }
+
+div[style*="border: 1px solid #ddd"] .btn-secondary {
+  background: #f1f3f5 !important;
+  border: 1.5px solid var(--border) !important;
+  color: var(--brand) !important;
+  font-weight: 700;
+  border-radius: 6px !important;
+  padding: 0.22rem 0.7rem;
+}
+
+div[style*="border: 1px solid #ddd"] .btn-secondary:hover {
+  background: var(--brand) !important;
+  color: #fff !important;
+}
+
+.container > h4 {
+  font-family: var(--font);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+/* ── ORDERS & PAGE HEADINGS ── */
+.container.mt-4 h2,
+.container.mt-4 h3.mb-4 {
+  font-size: 1.45rem;
+  font-weight: 700;
+  padding-bottom: 0.45rem;
+  border-bottom: 3px solid var(--primary);
+  display: inline-block;
+  margin-bottom: 1.3rem;
+}
+
+.card .form-select { font-size: 0.86rem; margin: 0.5rem 0; }
+
+/* ── ADMIN TABLE ── */
+.table {
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.table thead tr { background: var(--brand) !important; }
+
+.table thead th {
+  font-family: var(--font);
+  font-size: 0.84rem;
+  font-weight: 600;
+  padding: 0.8rem 1rem;
+  border: none !important;
+  color: #fff;
+}
+
+.table tbody tr:hover { background: #f0f4ff !important; }
+
+.table tbody td {
+  font-size: 0.87rem;
+  padding: 0.7rem 1rem;
+  vertical-align: middle;
+  border-color: var(--border) !important;
+}
+
+/* Admin form card headings */
+.card .card-body h4 {
+  font-family: var(--font);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--brand);
+  padding-bottom: 0.55rem;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1rem;
+}

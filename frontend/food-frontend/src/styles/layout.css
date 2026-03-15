@@ -1,0 +1,99 @@
+/* src/styles/layout.css */
+
+/* ── NAVBAR ── */
+.navbar {
+  background: var(--brand) !important;
+  padding: 0.8rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.18);
+}
+
+.navbar-brand {
+  font-family: var(--font);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff !important;
+}
+
+.nav-link {
+  font-family: var(--font);
+  font-size: 0.87rem;
+  font-weight: 500;
+  color: rgba(255,255,255,0.8) !important;
+  border-radius: 6px;
+  padding: 0.38rem 0.8rem !important;
+  transition: var(--ease);
+}
+
+.nav-link:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,0.1);
+}
+
+.navbar .btn-outline-light {
+  font-size: 0.84rem;
+  font-weight: 600;
+  border-radius: 18px;
+  padding: 0.32rem 1.1rem;
+  border: 1.5px solid rgba(255,255,255,0.45);
+  transition: var(--ease);
+}
+
+.navbar .btn-outline-light:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff !important;
+}
+
+/* ── HERO ── */
+.container > div[style*="background"] {
+  background: linear-gradient(135deg, var(--brand), var(--accent)) !important;
+  border-radius: 16px !important;
+  padding: 56px 36px !important;
+  box-shadow: var(--shadow-lg) !important;
+  overflow: hidden;
+}
+
+.container > div[style*="background"] h1 {
+  font-size: 1.9rem;
+  color: #fff;
+}
+
+.container > div[style*="background"] p {
+  color: rgba(255,255,255,0.88);
+  font-size: 0.97rem;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--brand) !important;
+  padding: 44px 0 20px !important;
+  margin-top: auto;    /* 👈 fix for sticky footer */
+}
+
+footer h5 {
+  font-family: var(--font);
+  font-size: 0.97rem;
+  font-weight: 700;
+  color: #fff !important;
+  margin-bottom: 0.9rem;
+}
+
+footer p {
+  font-size: 0.84rem;
+  color: rgba(255,255,255,0.55) !important;
+  margin-bottom: 5px;
+  transition: var(--ease);
+  cursor: pointer;
+}
+
+footer p:hover { color: var(--primary) !important; }
+
+footer hr { border-color: rgba(255,255,255,0.1) !important; }
+
+footer .text-center {
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.35) !important;
+}

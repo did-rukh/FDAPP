@@ -1,0 +1,15 @@
+
+@media (max-width: 768px) {
+  .container > div[style*="background"] {
+    padding: 38px 18px !important;
+    border-radius: var(--radius) !important;
+  }
+  .container > div[style*="background"] h1 { font-size: 1.4rem; }
+  .card-img-top { height: 148px !important; }
+  .navbar-brand { font-size: 1.15rem; }
+  .d-flex.justify-content-center.mt-5 > .card { padding: 1.4rem 1.1rem; }
+}
+
+@media (max-width: 480px) {
+  .card-img-top { height: 125px !important; }
+}
