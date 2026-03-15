@@ -47,7 +47,10 @@ mongoose.connect(process.env.MONGODB_URI)
     await createAdmin(); 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
+      console.log(
+        // `Server running at http://localhost:${PORT}`);
+                `Server running at ${process.env.BACKEND_URL || `http://localhost:${PORT}`}`
+      );
     });
   })
   .catch(err => {
