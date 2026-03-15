@@ -6,7 +6,7 @@ const {
 } = require("../controllers/orderController");
 
 const User = require("../models/User");
-const Order = require("../models/Order"); 
+const Order = require("../models/order"); 
 
 const router = express.Router();
 

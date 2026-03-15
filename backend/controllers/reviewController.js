@@ -1,5 +1,5 @@
 const Review = require("../models/Review");
-const Order = require("../models/Order");
+const Order = require("../models/order");
 const Restaurant = require("../models/Restaurant");
 
 const addReview = async (req, res) => {
