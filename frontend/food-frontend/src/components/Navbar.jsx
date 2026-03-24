@@ -6,8 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 function AppNavbar() {
   const navigate = useNavigate();
   const { token, role, logout } = useContext(AuthContext);
-  console.log("ROLE:", role);
-
+  if (role === null && token) return null;
+  if (role) console.log("ROLE:", role);
   const logoutHandler = () => {
     logout();
     navigate("/login"); 
@@ -27,23 +27,27 @@ function AppNavbar() {
           )}
           {token && (
           <>
-            {role === "user" && (
+            {/* {role  === "user" && ( */}
+            {role && role === "user" && (
           <>
            <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
             <Nav.Link as={Link} to="/orders">My Orders</Nav.Link>
             </>
              )}
-            {role === "restaurant" && (
-             <>
+            {role && role === "restaurant" && (            
+               <>
            <Nav.Link as={Link} to="/restaurant/orders">Restaurant Orders</Nav.Link>
              <Nav.Link as={Link} to="/restaurant/menu"> Manage Menu </Nav.Link>
+                 <Nav.Link as={Link} to="/restaurant/reviews">Reviews</Nav.Link>
+
+
                 </>
               )}
-             {role === "delivery" && (
+             {role && role === "delivery" && (
              <Nav.Link as={Link} to="/delivery/orders">Delivery Orders</Nav.Link>
               )}
-             {role === "admin" && (<Nav.Link as={Link} to="/admin">
-             Admin Dashboard</Nav.Link>
+             {role && role === "admin" && (
+              <Nav.Link as={Link} to="/admin">Admin Dashboard</Nav.Link>
               )}
             <Button variant="outline-light" onClick={logoutHandler}>Logout</Button>
             </>

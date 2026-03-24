@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
+import { toast } from "react-toastify";
+
 
 function Register() {
   const navigate = useNavigate();
@@ -29,11 +31,11 @@ function Register() {
     try {
       await API.post("/auth/register", formData);
 
-      alert("Registered successfully. Please login.");
+      toast.success("Registered successfully. Please login.");
       navigate("/login");
 
     } catch (error) {
-      alert(error.response?.data?.message || "Registration failed");
+      toast.error(error.response?.data?.message || "Registration failed");
     }
   };
 

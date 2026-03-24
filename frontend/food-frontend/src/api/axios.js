@@ -2,13 +2,15 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL, 
+  // baseURL: import.meta.env.VITE_BACKEND_URL, 
   // baseURL: process.env.REACT_APP_BACKEND_URL || "http://localhost:5000/api",
-  
-  withCredentials: true //  refresh token 
-});
+    // baseURL: import.meta.env.VITE_BACKEND_URL || "http://localhost:5000/api",   // last one
+    // withCredentials: true //  refresh token 
+    // });
 
-API.interceptors.request.use((req) => {
+     baseURL: "http://localhost:5000/api",
+ });
+ API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
 
   if (token) {

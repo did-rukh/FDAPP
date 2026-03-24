@@ -2,21 +2,18 @@ const Order = require("../models/order");
 const Product = require("../models/product");
 const Restaurant = require("../models/Restaurant");
 
-
-// PLACE ORDER
 exports.placeOrder = async (req, res) => {
   try {
     const userId = req.user._id;
     const { items } = req.body;
 
-    //  VALIDATE ITEMS
+    //validateitem
     if (!items || items.length === 0) {
       return res.status(400).json({
         message: "Order items are required"
       });
     }
 
-    //  GET FIRST PRODUCT
     const firstProduct = await Product.findById(items[0].product);
 
     if (!firstProduct) {
@@ -27,8 +24,7 @@ exports.placeOrder = async (req, res) => {
 
     const restaurantId = firstProduct.restaurant.toString();
     let totalPrice = 0;
-
-    //  CHECK ALL PRODUCTS
+    //  check all product
     for (let item of items) {
       const product = await Product.findById(item.product);
 
@@ -38,27 +34,23 @@ exports.placeOrder = async (req, res) => {
         });
       }
 
-
-      
       if (!product.available) {
         return res.status(400).json({                            
           message: `${product.name} is currently unavailable`
        });
      }
 
-
-      //  ONE RESTAURANT ONLY
       if (product.restaurant.toString() !== restaurantId) {
         return res.status(400).json({
           message: "All items must be from one restaurant"
         });
       }
 
-      //  CALCULATE TOTAL PRICE
+      
       totalPrice += product.price * item.quantity;
     }
 
-    //   CREATE ORDER
+    
     const order = await Order.create({
       user: userId,
       restaurant: restaurantId,
@@ -66,7 +58,7 @@ exports.placeOrder = async (req, res) => {
       totalPrice
     });
 
-    //  RESPONSE
+    
     res.status(201).json(order);
 
   } catch (error) {
@@ -77,7 +69,7 @@ exports.placeOrder = async (req, res) => {
   }
 };
 
-// GET MY ORDERS (USER)
+
 exports.getMyOrders = async (req, res) => {
   try {
     const orders = await Order.find({ user: req.user._id })
@@ -93,7 +85,7 @@ exports.getMyOrders = async (req, res) => {
   }
 };
 
-//get orders for restaurant 
+
 exports.getRestaurantOrders = async(req,res)=>{
   try{
     const restaurant = await Restaurant.findOne({ owner: req.user._id });
@@ -103,7 +95,7 @@ exports.getRestaurantOrders = async(req,res)=>{
         message: "Restaurant not found for this user "
       });
     }
-    //finds order for that restaurant
+
    const orders = await Order.find({ restaurant: restaurant._id })
     .populate("user", "name email")
     .populate("items.product", "name price");
@@ -117,20 +109,20 @@ exports.getRestaurantOrders = async(req,res)=>{
   }
 }
 
-// UPDATE ORDER STATUS (RESTAURANT)
+
 exports.updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
     const { orderId } = req.params;
 
-      // 1️ Validate status exists
+    
     if (!status) {
       return res.status(400).json({
         message: "Status is required"
       });
     }
 
-    // find restaurant owned by logged-in user
+  
     const restaurant = await Restaurant.findOne({ owner: req.user._id });
     if (!restaurant) {
       return res.status(403).json({
@@ -138,7 +130,7 @@ exports.updateOrderStatus = async (req, res) => {
       });
     }
 
-    // find order of this restaurant
+  
     const order = await Order.findOne({
       _id: orderId,
       restaurant: restaurant._id
@@ -151,7 +143,7 @@ exports.updateOrderStatus = async (req, res) => {
     }
 
 
-  // Define valid status transitions
+
 const validTransitions = {
   PLACED: ["CONFIRMED", "CANCELLED"],
   CONFIRMED: ["PREPARING", "CANCELLED"],
@@ -164,15 +156,15 @@ const validTransitions = {
 
 const currentStatus = order.status;
 
-// Check if status change is allowed
-if (!validTransitions[currentStatus].includes(status)) {
+
+if (!validTransitions[currentStatus].includes(status)) {  //preventinvalid updte
   return res.status(400).json({
     message: `Cannot change status from ${currentStatus} to ${status}`
   });
 }
 
     order.status = status;
-    await order.save();
+    await order.save();  //change permanent
 
     res.json(order);
 
@@ -185,16 +177,14 @@ if (!validTransitions[currentStatus].includes(status)) {
 };
 
 
-// USER CANCEL ORDER
 exports.cancelOrderByUser = async (req, res) => {
   try {
     const { orderId } = req.params;
 
-    //  Find user's order
     const order = await Order.findOne({
       _id: orderId,
-      user: req.user._id
-    });
+      user: req.user._id          
+    });                        
 
     if (!order) {
       return res.status(404).json({
@@ -202,14 +192,13 @@ exports.cancelOrderByUser = async (req, res) => {
       });
     }
 
-    // 2 Allow cancel only before PREPARING
     if (!["PLACED", "CONFIRMED"].includes(order.status)) {
       return res.status(400).json({
         message: "Order cannot be cancelled at this stage"
       });
     }
 
-    //  Update status
+    
     order.status = "CANCELLED";
     await order.save();
 
@@ -290,4 +279,21 @@ exports.updateDeliveryStatus = async (req, res) => {
   }
 };
 
+//  GET DELIVERY PARTNER ORDERS (FIXED)
+exports.getDeliveryOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({
+      deliveryPartner: req.user._id
+    })
+      .populate("user", "name email")
+      .populate("restaurant", "name")
+      .populate("items.product", "name price");
 
+    res.json(orders);
+  } catch (error) {
+    console.error("Get delivery orders error:", error);
+    res.status(500).json({
+      message: "Server error"
+    });
+  }
+};

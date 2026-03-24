@@ -1,25 +1,75 @@
 
-import { createContext, useState } from "react";
+// import { createContext, useState } from "react";
+
+// export const AuthContext = createContext();
+// export const AuthProvider = ({ children }) => {
+//   const [token, setToken] = useState(() => localStorage.getItem("token"));
+//   const [role, setRole] = useState(() => localStorage.getItem("role"));
+
+// const login = (token, role) => {
+
+//   setToken(token);
+//   setRole(role);
+//   localStorage.setItem("token", token);
+//    localStorage.setItem("role", role);
+// };
+//   const logout = () => {
+
+//    localStorage.removeItem("token");
+//    localStorage.removeItem("role");
+//    setToken(null);
+//  setRole(null);
+//   };
+
+//   return (
+//     <AuthContext.Provider value={{ token, role, login, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };   
+//    working crt code updated code nxt  
+
+
+
+
+
+
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
+
 export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
-  const [role, setRole] = useState(() => localStorage.getItem("role"));
+  const [token, setToken] = useState(null);
+  const [role, setRole] = useState(null);
+  const [loading, setLoading] = useState(true); // ✅ ADD
 
-const login = (token, role) => {
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedRole = localStorage.getItem("role");
 
-  setToken(token);
-  setRole(role);
-  localStorage.setItem("token", token);
-   localStorage.setItem("role", role);
-};
-  const logout = () => {
+    if (storedToken && storedRole) {
+      setToken(storedToken);
+      setRole(storedRole);
+    }
 
-   localStorage.removeItem("token");
-   localStorage.removeItem("role");
-   setToken(null);
- setRole(null);
+    setLoading(false); // ✅ IMPORTANT
+  }, []);
+
+  const login = (token, role) => {
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+    setToken(token);
+    setRole(role);
   };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setToken(null);
+    setRole(null);
+  };
+
+  if (loading) return null; // ✅ PREVENT NULL RENDER
 
   return (
     <AuthContext.Provider value={{ token, role, login, logout }}>
@@ -27,5 +77,6 @@ const login = (token, role) => {
     </AuthContext.Provider>
   );
 };
+
 
 

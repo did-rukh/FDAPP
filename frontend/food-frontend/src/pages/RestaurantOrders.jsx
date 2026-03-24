@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
 import { Container, Card, Button, Form } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 function RestaurantOrders() {
   const [orders, setOrders] = useState([]);
@@ -39,23 +40,23 @@ function RestaurantOrders() {
       await API.put(`/orders/${orderId}/status`, { status });
       fetchOrders();
     } catch (error) {
-      alert("Status update failed");
+      toast.error("Status update failed");
     }
   };
 
   const assignPartner = async (orderId) => {
     const partnerId = deliveryPartners[orderId];
     if (!partnerId) {
-      alert("Select a delivery partner first");
+      toast.error("Select a delivery partner first");
       return;
     }
 
     try {
       await API.put(`/orders/${orderId}/assign`, { deliveryPartnerId: partnerId });
-      alert("Delivery partner assigned!");
+      toast.success("Delivery partner assigned!");
       fetchOrders();
     } catch (error) {
-      alert(error.response?.data?.message || "Assignment failed");
+      toast.error(error.response?.data?.message || "Assignment failed");
     }
   };
 

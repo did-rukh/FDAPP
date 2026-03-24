@@ -15,7 +15,7 @@ exports.addRestaurant = async (req, res) => {
       zip
     } = req.body;
 
-    if (!name || !email || !password || !phone || !street || !city) {
+    if (!name || !email || !password || !phone || !street || !city || !state || !zip) {
       return res.status(400).json({
         message: "All required fields must be filled"
       });
@@ -89,10 +89,77 @@ exports.createDelivery = async (req, res) => {
 
     res.status(201).json({
       message: "Delivery partner created successfully",
-      deliveryUser
+      // deliveryUser
+       user: {
+      id: deliveryUser._id,
+      name: deliveryUser.name,
+      email: deliveryUser.email,
+      role: deliveryUser.role
+    }
+   });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getDeliveryPartners = async (req, res) => {
+  try {
+    const partners = await User.find({ role: "delivery" })
+      .select("name email isBlocked");
+
+    res.json(partners);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.toggleRestaurantBlock = async (req, res) => {
+  try {
+    const restaurant = await Restaurant.findById(req.params.id);
+
+    if (!restaurant) {
+      return res.status(404).json({ message: "Restaurant not found" });
+    }
+
+    restaurant.isBlocked = !restaurant.isBlocked;
+    await restaurant.save();
+
+    res.json({
+      message: restaurant.isBlocked
+        ? "Restaurant blocked"
+        : "Restaurant unblocked",
+      isBlocked: restaurant.isBlocked
     });
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.toggleUserBlock = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.role !== "delivery") {
+      return res.status(400).json({ message: "Only delivery can be blocked" });
+    }
+
+    user.isBlocked = !user.isBlocked;
+    await user.save();
+
+    res.json({
+      message: user.isBlocked
+        ? "Delivery partner blocked"
+        : "Delivery partner unblocked",
+      isBlocked: user.isBlocked
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}; 

@@ -29,7 +29,7 @@ function Footer() {
             <h5>Contact</h5>
             <p>Email: support@tastetrack.com</p>
             <p>Phone: +91 9876543210</p>
-            <p>Location: Banglore, India</p>
+            <p>Location: Bangalore, India</p>
           </Col> 
           <Col md={3}>
             <h5>Info</h5>
@@ -42,7 +42,7 @@ function Footer() {
         <hr style={{ borderColor: "#444" }} />
 
         <p className="text-center">
-          © {new Date().getFullYear()} TasteTrackk. All rights reserved.
+          © {new Date().getFullYear()} TasteTrack. All rights reserved.
         </p>
 
       </Container>

@@ -8,6 +8,12 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
 
+      //  ADD THIS CHECK 
+  if (!product.available) {
+    alert(`${product.name} is currently unavailable`);
+    return;
+  }
+
     setCartItems((prevCart) => {
 
       if (

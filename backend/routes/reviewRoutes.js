@@ -3,7 +3,8 @@ const router = express.Router();
 const { protect } = require("../middlewares/authMiddleware");
 const {
   addReview,
-  getRestaurantReviews
+  getRestaurantReviews,
+  updateReview
 } = require("../controllers/reviewController");
 
 const Review = require("../models/Review"); 
@@ -22,13 +23,19 @@ router.get("/order/:orderId", protect, async (req, res) => {
       user: req.user && req.user.id
     });
 
-    res.json({ alreadyReviewed: !!existingReview });
+    res.json({ alreadyReviewed: !!existingReview,
+               review: existingReview || null
+     });
 
   } catch (error) {
     console.error("Review check error:", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+
+router.put("/:id", protect, updateReview); 
+
 
 
 module.exports = router;

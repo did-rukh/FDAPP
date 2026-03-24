@@ -1,27 +1,91 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
+// import { Container, Card } from "react-bootstrap";
+// import API from "../api/axios";
+
+// function RestaurantReviews({ restaurantId }) {
+//   const [reviews, setReviews] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+
+//       if (!restaurantId) return; 
+
+//     const fetchReviews = async () => {
+//       try {
+//         const { data } = await API.get(`/reviews/restaurant/${restaurantId}`);
+//         setReviews(data);
+//       } catch (error) {
+//         console.error("Error fetching reviews:", error.response?.data || error.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchReviews();
+//   }, [restaurantId]);
+
+//   if (loading) return <p>Loading reviews...</p>;
+//   if (reviews.length === 0) return <p>No reviews yet</p>;
+
+//   return (
+//     <Container className="mt-4">
+//       <h4>Reviews</h4>
+
+//       {reviews.map((review) => (
+//         <Card key={review._id} className="mb-3">
+//           <Card.Body>
+//             <Card.Title>
+//               {review.user?.name || "Anonymous"} - {review.rating}⭐
+//             </Card.Title>
+//             <Card.Text>{review.comment}</Card.Text>
+//             <Card.Text className="text-muted">
+//               {new Date(review.createdAt).toLocaleDateString()}
+//             </Card.Text>
+//           </Card.Body>
+//         </Card>
+//       ))}
+//     </Container>
+//   );
+// }
+
+// export default RestaurantReviews;        //this was old code 
+
+
+
+
+import { useState, useEffect } from "react";
 import { Container, Card } from "react-bootstrap";
 import API from "../api/axios";
-
-function RestaurantReviews({ restaurantId }) {
+function RestaurantReviews({ restaurantId: propRestaurantId }) {
   const [reviews, setReviews] = useState([]);
+  const [restaurantId, setRestaurantId] = useState(propRestaurantId || null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-      if (!restaurantId) return; 
-
-    const fetchReviews = async () => {
+    const loadData = async () => {
       try {
-        const { data } = await API.get(`/reviews/restaurant/${restaurantId}`);
-        setReviews(data);
+        setLoading(true);
+
+        let id = restaurantId;
+
+        // 🔥 If no prop, fetch automatically
+        if (!id) {
+          const res = await API.get("/restaurants/my-restaurant");
+          id = res.data._id;
+          setRestaurantId(id);
+        }
+
+        const reviewRes = await API.get(`/reviews/restaurant/${id}`);
+        setReviews(reviewRes.data);
+
       } catch (error) {
-        console.error("Error fetching reviews:", error.response?.data || error.message);
+        console.error("Error:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchReviews();
+    loadData();
   }, [restaurantId]);
 
   if (loading) return <p>Loading reviews...</p>;
@@ -35,7 +99,7 @@ function RestaurantReviews({ restaurantId }) {
         <Card key={review._id} className="mb-3">
           <Card.Body>
             <Card.Title>
-              {review.user?.name || "Anonymous"} - {review.rating}⭐
+              {review.user?.name || "Anonymous"} - {"⭐".repeat(review.rating)}
             </Card.Title>
             <Card.Text>{review.comment}</Card.Text>
             <Card.Text className="text-muted">
@@ -45,7 +109,9 @@ function RestaurantReviews({ restaurantId }) {
         </Card>
       ))}
     </Container>
+
   );
 }
+
 
 export default RestaurantReviews;

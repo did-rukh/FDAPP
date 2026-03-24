@@ -1,7 +1,325 @@
 
+// import { useEffect, useState } from "react";
+// import { Container, Card, Button, Form, Row, Col } from "react-bootstrap";
+// import API from "../api/axios";
+// import { toast } from "react-toastify"; 
+
+
+
+
+// function RestaurantMenuManag() {
+//   const [restaurantId, setRestaurantId] = useState(null);
+//   const [products, setProducts] = useState([]);
+
+//   const [name, setName] = useState("");
+//   const [price, setPrice] = useState("");
+//   const [description, setDescription] = useState("");
+//   const [category, setCategory] = useState("");
+//   const [imageFile, setImage] = useState(null); 
+//   const [loading, setLoading] = useState(false);
+
+
+//   const fetchRestaurant = async () => {
+//     try {
+//       const res = await API.get("/restaurants/my-restaurant", {
+//         headers: {
+// Authorization: `Bearer ${localStorage.getItem("token")}`,        },
+//       });
+//       setRestaurantId(res.data._id);
+//       fetchProducts(res.data._id);
+//     } catch (error) {
+//       console.error("Error fetching restaurant:", error);
+//     }
+//   };
+
+  
+//   const fetchProducts = async (id) => {
+//     try {
+//       const res = await API.get(`/products?restaurantId=${id}`);
+//       setProducts(res.data);
+//       // setProducts(res.data.filter(p => p.available));
+//     } catch (error) {
+//       console.error("Error fetching products:", error);
+//     }
+//   };
+
+//   // Add Product
+//   const handleAddProduct = async (e) => {
+//     e.preventDefault();
+    
+//     if (loading) return; 
+
+//     if (!name || !price) {
+//       alert("Product name and price required");
+//       return;
+//     }
+
+//     try {
+//       setLoading(true); 
+
+//       const formData = new FormData();
+//       formData.append("name", name);
+//       formData.append("price", price);
+//       formData.append("description", description);
+//       formData.append("category", category);
+//       formData.append("image", imageFile); 
+
+//       await API.post("/products", formData, {
+//         headers: {
+//           "Content-Type": "multipart/form-data",
+//           Authorization: `Bearer ${localStorage.getItem("token")}`, 
+//         },
+//       });
+
+//       toast.success("Product added successfully");
+
+//       setName("");
+//       setPrice("");
+//       setDescription("");
+//       setCategory("");
+//       setImage(null);
+
+//       fetchProducts(restaurantId);
+//     } catch (error) {
+//       console.error("Product creation failed:", error);
+//       toast.error("Failed to add product");
+//     } finally {
+//       setLoading(false); 
+//     }
+//   };
+
+//   //   const toggleAvailability = async (id) => {
+//   //   try {
+//   //     await API.put(`/products/${id}`, {}, {
+//   //       headers: {
+//   //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//   //       },
+//   //     });
+//   //     fetchProducts(restaurantId);
+//   //   } catch (error) {
+//   //     console.error("Toggle failed:", error);
+//   //     toast.error("Failed to update status");
+//   //   }
+//   // };
+
+
+//     const toggleAvailability = async (id) => {
+//   try {
+//     const res = await API.put(`/products/toggle/${id}`, {}, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     });
+
+//     toast.success(res.data.message);
+
+//     // 🔥 instant UI update
+//     setProducts((prev) =>
+//       prev.map((p) =>
+//         p._id === id ? { ...p, available: res.data.available } : p
+//       )
+//     );
+
+//   } catch (error) {
+//     console.error("Toggle failed:", error);
+//     toast.error("Failed to update status");
+//   }
+// };  
+   
+//   const deleteProduct = async (id) => {
+//   if (!window.confirm("Delete this product permanently?")) return;
+
+//   try {
+//     const res = await API.delete(`/products/delete/${id}`, {
+//       headers: {
+//         Authorization: `Bearer ${localStorage.getItem("token")}`,
+//       },
+//     });
+
+//     toast.success(res.data.message);
+
+//     // 🔥 remove from UI instantly
+//     setProducts((prev) => prev.filter((p) => p._id !== id));
+
+//   } catch (error) {
+//     console.error("Delete failed:", error);
+//     toast.error("Failed to delete product");
+//   }
+// };
+  
+//   useEffect(() => {
+//     fetchRestaurant();
+//   }, []);
+
+//   return (
+//     <Container className="mt-4">
+//       <h2 className="mb-4">Manage Menu</h2>
+
+//       {/* ADD PRODUCT */}
+//       <Card className="mb-4">
+//         <Card.Body>
+//           <h4>Add New Menu Item</h4>
+//           <Form onSubmit={handleAddProduct}>
+//             <Row>
+//               <Col md={6}>
+//                 <Form.Group className="mb-3">
+//                   <Form.Label>Product Name</Form.Label>
+//                   <Form.Control
+//                     type="text"
+//                     value={name}
+//                     onChange={(e) => setName(e.target.value)}
+//                     placeholder="Enter product name"
+//                   />
+//                 </Form.Group>
+//               </Col>
+//               <Col md={6}>
+//                 <Form.Group className="mb-3">
+//                   <Form.Label>Price</Form.Label>
+//                   <Form.Control
+//                     type="number"
+//                     value={price}
+//                     onChange={(e) => setPrice(e.target.value)}
+//                     placeholder="Enter price"
+//                   />
+//                 </Form.Group>
+//               </Col>
+//             </Row>
+
+//             <Form.Group className="mb-3">
+//               <Form.Label>Description</Form.Label>
+//               <Form.Control
+//                 type="text"
+//                 value={description}
+//                 onChange={(e) => setDescription(e.target.value)}
+//                 placeholder="Optional description"
+//               />
+//             </Form.Group>
+
+//             <Form.Group className="mb-3">
+//               <Form.Label>Category</Form.Label>
+//               <Form.Control
+//                 type="text"
+//                 value={category}
+//                 onChange={(e) => setCategory(e.target.value)}
+//                 placeholder="Example: Biryani, Drinks"
+//               />
+//             </Form.Group>
+
+//             <Form.Group className="mb-3">
+//               <Form.Label>Upload Image</Form.Label>
+//               <Form.Control
+//                 type="file"
+//                 accept="image/*"
+//                 onChange={(e) => setImage(e.target.files[0])}
+//               />
+//             </Form.Group>
+
+//             <Button type="submit" disabled={loading}>
+//              {loading ? "Adding..." : "Add Product"}
+//              </Button>
+             
+//           </Form>
+//         </Card.Body>
+//       </Card>
+
+//       <h4 className="mt-4">Your Menu</h4>
+//       {products.length === 0 ? (
+//         <p>No menu items added</p>
+//       ) : (
+//         products.map((product) => (
+//           <Card key={product._id} className="mb-3">
+//             <Card.Body>
+//               <Row>
+//                 <Col md={8}>
+//                   <Card.Title>{product.name}</Card.Title>
+//                   <Card.Text>₹ {product.price}</Card.Text>
+//                   {product.description && <Card.Text>{product.description}</Card.Text>}
+//                   {product.category && (
+//                     <Card.Text>
+//                       <strong>Category:</strong> {product.category}
+//                     </Card.Text>
+//                   )}
+//                   <Card.Text>
+//                     <strong>Status:</strong> {product.available ? "Available" : "Out of Stock"}
+//                   </Card.Text>
+
+//                   {/* <Button
+//                     variant={product.available ? "secondary" : "success"}
+//                     onClick={() => toggleAvailability(product._id)}
+//                   >
+//                     {product.available ? "Mark Out of Stock" : "Mark Available"}
+//                   </Button> */}
+                
+//                 <div className="d-flex gap-2 mt-2">
+
+//            {/* TOGGLE BUTTON */}
+//       <Button
+//          variant={product.available ? "secondary" : "success"}
+//          onClick={() => toggleAvailability(product._id)}>
+//     {product.available ? "Out of Stock" : "Available"}
+//     </Button>
+
+//      {/* DELETE BUTTON */}
+//      <Button
+//       variant="danger"
+//       onClick={() => deleteProduct(product._id)}>Delete
+//      </Button>
+
+//        </div>
+            
+//                 </Col>
+
+//                 <Col
+//                   md={4}
+//                   className="d-flex align-items-center justify-content-center mt-3 mt-md-0"
+//                 >
+//                   {product.image ? (
+//                     <img
+//                       src={product.image}
+//                       alt={product.name}
+//                       style={{
+//                         width: "150px",
+//                         height: "150px",
+//                         objectFit: "cover",
+//                         borderRadius: "8px",
+//                       }}
+//                     />
+//                   ) : (
+//                     <div
+//                       style={{
+//                         width: "150px",
+//                         height: "150px",
+//                         backgroundColor: "#f0f0f0",
+//                         display: "flex",
+//                         alignItems: "center",
+//                         justifyContent: "center",
+//                         borderRadius: "8px",
+//                         color: "#aaa",
+//                       }}
+//                     >
+//                       No Image
+//                     </div>
+//                   )}
+//                 </Col>
+//               </Row>
+//             </Card.Body>
+//           </Card>
+//         ))
+//       )}
+//     </Container>
+//   );
+// }
+
+// export default RestaurantMenuManag;                      // old code  
+
+
+
+
+
 import { useEffect, useState } from "react";
-import { Container, Card, Button, Form, Row, Col } from "react-bootstrap";
+import { Container, Card, Button, Form, Row, Col, Modal } from "react-bootstrap";
 import API from "../api/axios";
+import { toast } from "react-toastify"; 
 
 function RestaurantMenuManag() {
   const [restaurantId, setRestaurantId] = useState(null);
@@ -12,6 +330,11 @@ function RestaurantMenuManag() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [imageFile, setImage] = useState(null); 
+  const [loading, setLoading] = useState(false);
+
+  // 🔥 DELETE MODAL STATES
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
 
   const fetchRestaurant = async () => {
     try {
@@ -27,7 +350,6 @@ function RestaurantMenuManag() {
     }
   };
 
-  
   const fetchProducts = async (id) => {
     try {
       const res = await API.get(`/products?restaurantId=${id}`);
@@ -37,15 +359,20 @@ function RestaurantMenuManag() {
     }
   };
 
-  // Add Product
+  // ✅ ADD PRODUCT
   const handleAddProduct = async (e) => {
     e.preventDefault();
+    
+    if (loading) return; 
+
     if (!name || !price) {
-      alert("Product name and price required");
+      toast.error("Product name and price required");
       return;
     }
 
     try {
+      setLoading(true); 
+
       const formData = new FormData();
       formData.append("name", name);
       formData.append("price", price);
@@ -60,7 +387,7 @@ function RestaurantMenuManag() {
         },
       });
 
-      alert("Product added successfully");
+      toast.success("Product added successfully");
 
       setName("");
       setPrice("");
@@ -71,20 +398,62 @@ function RestaurantMenuManag() {
       fetchProducts(restaurantId);
     } catch (error) {
       console.error("Product creation failed:", error);
-      alert("Failed to add product");
+      toast.error("Failed to add product");
+    } finally {
+      setLoading(false); 
     }
   };
 
-    const toggleAvailability = async (id) => {
+  // ✅ TOGGLE AVAILABILITY
+  const toggleAvailability = async (id) => {
     try {
-      await API.put(`/products/${id}`, {}, {
+      const res = await API.put(`/products/toggle/${id}`, {}, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
-      fetchProducts(restaurantId);
+
+      toast.success(res.data.message);
+
+      setProducts((prev) =>
+        prev.map((p) =>
+          p._id === id ? { ...p, available: res.data.available } : p
+        )
+      );
+
     } catch (error) {
       console.error("Toggle failed:", error);
+      toast.error("Failed to update status");
+    }
+  };
+
+  // ✅ OPEN DELETE MODAL
+  const deleteProduct = (id) => {
+    setSelectedProductId(id);
+    setShowDeleteModal(true);
+  };
+
+  // ✅ CONFIRM DELETE
+  const confirmDelete = async () => {
+    try {
+      const res = await API.delete(`/products/delete/${selectedProductId}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      toast.success(res.data.message);
+
+      setProducts((prev) =>
+        prev.filter((p) => p._id !== selectedProductId)
+      );
+
+    } catch (error) {
+      console.error("Delete failed:", error);
+      toast.error("Failed to delete product");
+    } finally {
+      setShowDeleteModal(false);
+      setSelectedProductId(null);
     }
   };
 
@@ -155,12 +524,15 @@ function RestaurantMenuManag() {
               />
             </Form.Group>
 
-            <Button type="submit">Add Product</Button>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Adding..." : "Add Product"}
+            </Button>
           </Form>
         </Card.Body>
       </Card>
 
       <h4 className="mt-4">Your Menu</h4>
+
       {products.length === 0 ? (
         <p>No menu items added</p>
       ) : (
@@ -171,21 +543,41 @@ function RestaurantMenuManag() {
                 <Col md={8}>
                   <Card.Title>{product.name}</Card.Title>
                   <Card.Text>₹ {product.price}</Card.Text>
-                  {product.description && <Card.Text>{product.description}</Card.Text>}
+
+                  {product.description && (
+                    <Card.Text>{product.description}</Card.Text>
+                  )}
+
                   {product.category && (
                     <Card.Text>
                       <strong>Category:</strong> {product.category}
                     </Card.Text>
                   )}
+
                   <Card.Text>
-                    <strong>Status:</strong> {product.available ? "Available" : "Out of Stock"}
+                    <strong>Status:</strong>{" "}
+                    {product.available ? "Available" : "Out of Stock"}
                   </Card.Text>
-                  <Button
-                    variant={product.available ? "secondary" : "success"}
-                    onClick={() => toggleAvailability(product._id)}
-                  >
-                    {product.available ? "Mark Out of Stock" : "Mark Available"}
-                  </Button>
+
+                  <div className="d-flex gap-2 mt-2">
+
+                    {/* TOGGLE */}
+                    <Button
+                      variant={product.available ? "secondary" : "success"}
+                      onClick={() => toggleAvailability(product._id)}
+                    >
+                      {product.available ? "Out of Stock" : "Available"}
+                    </Button>
+
+                    {/* DELETE */}
+                    <Button
+                      variant="danger"
+                      onClick={() => deleteProduct(product._id)}
+                    >
+                      Delete
+                    </Button>
+
+                  </div>
                 </Col>
 
                 <Col
@@ -225,8 +617,32 @@ function RestaurantMenuManag() {
           </Card>
         ))
       )}
+
+      {/* 🔥 DELETE MODAL */}
+      <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Delete</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          Are you sure you want to delete this product? <br />
+          <strong>This action cannot be undone.</strong>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+
+          <Button variant="danger" onClick={confirmDelete}>
+            Delete
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
     </Container>
   );
 }
 
 export default RestaurantMenuManag;
+

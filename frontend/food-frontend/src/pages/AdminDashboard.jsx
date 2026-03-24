@@ -2,7 +2,7 @@ import { useState } from "react";
 import API from "../api/axios";
 import { Container, Form, Button, Row, Col, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "react-toastify";
 
 function AdminDashboard() {
 
@@ -37,9 +37,9 @@ function AdminDashboard() {
     e.preventDefault();
 
     try {
-      const res = await API.post("/admin/restaurant", restaurantData);
+      const res = await API.post("/admin/add-restaurant", restaurantData);
 
-      alert("Restaurant created successfully");
+      toast.success("Restaurant created successfully");
       console.log(res.data);
 
       setRestaurantData({
@@ -55,16 +55,16 @@ function AdminDashboard() {
 
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Error creating restaurant");
+      toast.error(err.response?.data?.message || "Error creating restaurant");
     }
   };
 
   const createDelivery = async (e) => {
     e.preventDefault();
     try {
-      const res = await API.post("/admin/createDelivery", deliveryData);
+      const res = await API.post("/admin/create-delivery", deliveryData);
 
-      alert("Delivery partner created");
+      toast.success("Delivery partner created");
       console.log(res.data);
 
       setDeliveryData({
@@ -76,7 +76,7 @@ function AdminDashboard() {
 
     } catch (err) {
       console.error(err);
-      alert(err.response?.data?.message || "Error creating delivery partner");
+      toast.error(err.response?.data?.message || "Error creating delivery partner");
     }
   };
 
@@ -218,6 +218,20 @@ function AdminDashboard() {
           </Card>
         </Col>
       </Row>
+       
+       <Row className="mt-4">
+    <Col>
+    <Card className="p-3 text-center">
+      <h4>Delivery Management</h4>
+      <Button
+        variant="dark"
+        onClick={() => navigate("/admin/delivery")}
+      >
+        View Delivery Partners
+      </Button>
+    </Card>
+   </Col>
+     </Row>
     </Container>
   );
 }

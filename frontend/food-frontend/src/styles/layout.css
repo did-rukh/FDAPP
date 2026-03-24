@@ -1,6 +1,4 @@
-/* src/styles/layout.css */
 
-/* ── NAVBAR ── */
 .navbar {
   background: var(--brand) !important;
   padding: 0.8rem 0;
@@ -47,7 +45,6 @@
   color: #fff !important;
 }
 
-/* ── HERO ── */
 .container > div[style*="background"] {
   background: linear-gradient(135deg, var(--brand), var(--accent)) !important;
   border-radius: 16px !important;
@@ -66,11 +63,10 @@
   font-size: 0.97rem;
 }
 
-/* ── FOOTER ── */
 footer {
   background: var(--brand) !important;
   padding: 44px 0 20px !important;
-  margin-top: auto;    /* 👈 fix for sticky footer */
+  margin-top: auto;    
 }
 
 footer h5 {

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
+import { toast } from "react-toastify";
 
 function Login() {
 
@@ -31,13 +32,15 @@ function Login() {
 
       await API.post("/auth/login", formData);
 
+     toast.success("OTP sent to your email 📩");
+
       localStorage.setItem("otpEmail", formData.email);
 
       navigate("/verify-otp");
 
     } catch (error) {
 
-      alert(error.response?.data || "Login failed");
+      toast.error(error.response?.data || "Login failed");
 
     }
 

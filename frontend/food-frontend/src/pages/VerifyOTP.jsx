@@ -5,6 +5,7 @@ import { Container, Form, Button, Card } from "react-bootstrap";
 import { jwtDecode } from "jwt-decode";
 import API from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 function VerifyOTP() {
 
@@ -20,16 +21,31 @@ function VerifyOTP() {
   const email = localStorage.getItem("otpEmail");
 
   if (!email) {
-    alert("Session expired. Please login again.");
+    toast.error("Session expired. Please login again.");
     navigate("/login");
     return;
   }
+  
+    if (!otp || otp.length < 4) {
+      toast.error("Enter valid OTP");
+      return;
+    }
 
-  try {
-    const { data } = await API.post("/auth/verify-otp", {
-      email,
-      otp,
-    });
+    try {
+      console.log("Sending OTP:", { email, otp });
+
+      const { data } = await API.post("/auth/verify-otp", {
+        email,
+        otp, 
+      });
+
+
+
+  // try {
+  //   const { data } = await API.post("/auth/verify-otp", {
+  //     email,
+  //     otp,
+  //   });
 
     const token = data.accessToken;
 
@@ -39,6 +55,9 @@ function VerifyOTP() {
 
     console.log("ROLE FROM TOKEN:", role);
 
+    localStorage.setItem("token", token);
+    localStorage.setItem("role", role);
+
     login(token, role);
 
     localStorage.removeItem("otpEmail");
@@ -47,7 +66,7 @@ function VerifyOTP() {
 
   } catch (error) {
     console.log(error.response?.data);
-    alert(error.response?.data?.message || "Invalid OTP");
+    toast.error(error.response?.data?.message || "Invalid OTP");
   }
 };
 
@@ -70,7 +89,11 @@ function VerifyOTP() {
               <Form.Control
                 type="text"
                 value={otp}
-                onChange={(e) => setOtp(e.target.value)}
+                onChange={(e) =>
+                   setOtp(e.target.value.replace(/\D/g, ""))
+                  }
+                 maxLength={6} 
+
                 required
               />
 

@@ -18,19 +18,22 @@ const transporter = nodemailer.createTransport({
 exports.register = async (req, res) => {
   const { name, email, password, phone, role } = req.body;
   try {
-    if (!name || !email || !password || !phone || !role)
-      return res.status(400).json({ message: "All fields are required" });
+    // if (!name || !email || !password || !phone || !role)
+    if (!name || !email || !password || !phone)  {
 
+      return res.status(400).json({ message: "All fields are required" });
+    }
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword, phone });
+    const newUser = new User({ name, email, password: hashedPassword, phone, role: role || "user", isVerified: false });
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
-    // const verifyURL = `http://localhost:5000/api/auth/verify/${token}`;  
-    const verifyURL = `${process.env.BACKEND_URL}/api/auth/verify/${token}`;
+    const verifyURL = `http://localhost:5000/api/auth/verify/${token}`;  
+    // const verifyURL = `${process.env.BACKEND_URL}/api/auth/verify/${token}`;   // new one  
+    // const verifyURL = `${process.env.BACKEND_URL}/api/auth/verify/${token}`;
 
 
     await transporter.sendMail({
@@ -66,6 +69,13 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user)
        return res.status(400).json("User not found");
+    // 🔴 ADD THIS BLOCK CHECK HERE
+   if (user.isBlocked) {
+   return res.status(403).json({
+    message: "Your account is blocked by admin"
+    });
+  }
+
     if (!user.isVerified)
        return res.status(400).json("Email not verified");
 
@@ -104,7 +114,7 @@ exports.verifyOTP = async (req, res) => {
     user.otp = null;
     user.otpExpiry = null;
 
-    const accessToken = jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "2hr" });      //   onlu adding role
+    const accessToken = jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });      //   onlu adding role
     const refreshToken = jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: "7d" });
 
     user.refreshToken = refreshToken;
@@ -117,7 +127,7 @@ exports.verifyOTP = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.status(200).json({ message: "Login successful", accessToken });
+    res.status(200).json({ message: "Login successful", accessToken , role: user.role   });
   } catch (err) {
     console.error("Error verifying OTP:", err);
     res.status(500).json({ message: "Server error" });
@@ -134,7 +144,7 @@ exports.refreshToken = async (req, res) => {
     const user = await User.findById(decoded.id);
     if (!user || user.refreshToken !== token) return res.status(403).json({ message: "Invalid token" });
 
-    const newAccessToken = jwt.sign({ id: user._id, email: user.email }, process.env.JWT_SECRET, { expiresIn: "7d" });
+    const newAccessToken = jwt.sign({ id: user._id, email: user.email, role: user.role }, process.env.JWT_SECRET, { expiresIn: "7d" });
     res.status(200).json({ accessToken: newAccessToken });
   } catch (err) {
     console.error(err);

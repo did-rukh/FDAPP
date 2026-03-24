@@ -6,10 +6,11 @@ const { authorizeRoles } = require("../middlewares/roleMiddleware");
 const Product = require("../models/product"); 
 const upload = require("../config/multer");
 const {
-  getProducts,createProduct
+  getProducts, createProduct, deleteProduct, toggleAvailability
 } = require("../controllers/productController");
 
 router.get("/", getProducts);
+
 router.post(
   "/",
   protect,
@@ -17,38 +18,22 @@ router.post(
   upload.single("image"), 
   createProduct
 );
-router.put(
-  "/:id",
+
+// ✅ DELETE PRODUCT
+router.delete(
+  "/delete/:id",
   protect,
-  authorizeRoles("admin", "restaurant"),
-  async (req, res) => {
-
-    try {
-
-      const product = await Product.findById(req.params.id);
-
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-
-      product.available = !product.available;
-
-      await product.save();
-
-      res.json(product);
-
-    } catch (error) {
-
-      res.status(500).json({ message: error.message });
-
-    }
-
-  }
+  authorizeRoles("restaurant"),
+  deleteProduct
 );
 
-
-
-
+// ✅ TOGGLE AVAILABILITY
+router.put(
+  "/toggle/:id",
+  protect,
+  authorizeRoles("restaurant"),
+  toggleAvailability
+);
 
 
 router.put(

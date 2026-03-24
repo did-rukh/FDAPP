@@ -22,6 +22,11 @@ const restaurantSchema = new mongoose.Schema({
 totalReviews: {
   type: Number,
   default: 0
+},
+
+isBlocked: {
+  type: Boolean,
+  default: false
 }
 }, { timestamps: true });
 
