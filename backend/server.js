@@ -23,11 +23,15 @@ app.use(cookieParser());
 //   credentials: true,                  //  this code was old one
 // }));
 
+// app.use(cors({
+//   origin: true,   // ✅ allow dynamic origin        // last used  
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: true,   // ✅ allow dynamic origin
+  origin: process.env.FRONTEND_URL, // frontend URL from .env
   credentials: true
 }));
-
 
 // Optional logger
 app.use((req, res, next) => {

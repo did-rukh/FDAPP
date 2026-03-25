@@ -8,11 +8,13 @@ const API = axios.create({
     // withCredentials: true //  refresh token 
     // });
 
-     baseURL: "http://localhost:5000/api",
+    //  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_BACKEND_URL || "https://fdapp-cy7o.onrender.com/api",
+    withCredentials: true, // ✅ important for cookies
+
  });
  API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
-
   if (token) {
     req.headers.Authorization = `Bearer ${token}`;
   }
