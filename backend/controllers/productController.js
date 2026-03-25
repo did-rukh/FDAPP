@@ -1,6 +1,27 @@
 const Product = require("../models/product");
 const Restaurant = require("../models/Restaurant");
 
+// exports.getProducts = async (req, res, next) => {
+//   try {
+//     const { restaurantId } = req.query;
+//     let filter = {};
+
+//     if (restaurantId) {
+//       filter.restaurant = restaurantId;
+//     } 
+//     else {
+//       filter.available = true;
+//     }
+
+//     const products = await Product.find(filter);
+//     res.json(products);
+
+//   } catch (err) {
+//     console.log("error fetching products", err);
+//     next(err);
+//   }
+// };
+
 exports.getProducts = async (req, res, next) => {
   try {
     const { restaurantId } = req.query;
@@ -8,19 +29,29 @@ exports.getProducts = async (req, res, next) => {
 
     if (restaurantId) {
       filter.restaurant = restaurantId;
-    } 
-    else {
+    } else {
       filter.available = true;
     }
 
-    const products = await Product.find(filter);
-    res.json(products);
+    // ✅ POPULATE RESTAURANT
+    const products = await Product.find(filter).populate("restaurant");
+
+    // ✅ FILTER BLOCKED RESTAURANTS
+    const filteredProducts = products.filter(
+      (p) => p.restaurant && !p.restaurant.isBlocked
+    );
+
+    res.json(filteredProducts);
 
   } catch (err) {
     console.log("error fetching products", err);
     next(err);
   }
 };
+
+
+
+
 
 exports.createProduct = async (req, res, next) => {
   try {

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import { toast } from "react-toastify";
 
-
 function AdminRestaurants() {
 
   const [restaurants, setRestaurants] = useState([]);
@@ -15,7 +14,6 @@ function AdminRestaurants() {
       const { data } = await API.get("/restaurants");
       setRestaurants(data);
     };
-
     fetchRestaurants();
   }, []);
     
@@ -24,7 +22,6 @@ function AdminRestaurants() {
     const res = await API.put(`/admin/toggle-restaurant/${id}`);
     toast.success(res.data.message);
 
-    // update UI instantly
     setRestaurants((prev) =>
       prev.map((r) =>
         r._id === id ? { ...r, isBlocked: res.data.isBlocked } : r
@@ -35,8 +32,6 @@ function AdminRestaurants() {
     toast.error("Action failed");
   }
 };
-   
-
   return (
     <Container className="mt-4">
 
@@ -59,12 +54,10 @@ function AdminRestaurants() {
         <tbody>
           {restaurants.map((r) => (
             <tr key={r._id}>
-
               <td>{r.name}</td>
               <td>{r.address?.city}</td>
               <td>{r.averageRating || 0} ⭐</td>
 
-                {/* ✅ BLOCK STATUS */}
               <td>
                 {r.isBlocked ? (
                   <Badge bg="danger">Blocked</Badge>
@@ -91,7 +84,6 @@ function AdminRestaurants() {
                 </Button>
               </td>
 
-             {/* 🔴 BLOCK BUTTON */}
               <td>
                 <Button
                   variant={r.isBlocked ? "success" : "danger"}

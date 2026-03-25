@@ -33,24 +33,14 @@ function VerifyOTP() {
 
     try {
       console.log("Sending OTP:", { email, otp });
-
       const { data } = await API.post("/auth/verify-otp", {
         email,
         otp, 
       });
 
 
-
-  // try {
-  //   const { data } = await API.post("/auth/verify-otp", {
-  //     email,
-  //     otp,
-  //   });
-
     const token = data.accessToken;
-
     const decoded = jwtDecode(token);
-
     const role = decoded.role;
 
     console.log("ROLE FROM TOKEN:", role);
@@ -73,17 +63,11 @@ function VerifyOTP() {
   return (
 
     <Container className="d-flex justify-content-center mt-5">
-
       <Card style={{ width: "400px" }}>
-
-        <Card.Body>
-
+      <Card.Body>
           <h3 className="mb-3 text-center">Verify OTP</h3>
-
           <Form onSubmit={submitHandler}>
-
             <Form.Group className="mb-3">
-
               <Form.Label>Enter OTP</Form.Label>
 
               <Form.Control
@@ -96,19 +80,14 @@ function VerifyOTP() {
 
                 required
               />
-
             </Form.Group>
 
             <Button type="submit" className="w-100">
               Verify
             </Button>
-
           </Form>
-
         </Card.Body>
-
       </Card>
-
     </Container>
 
   );

@@ -1,5 +1,3 @@
-
-
 import { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +19,6 @@ function Login() {
       ...formData,
       [e.target.name]: e.target.value,
     });
-
   };
 
   const submitHandler = async (e) => {

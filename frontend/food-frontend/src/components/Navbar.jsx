@@ -27,7 +27,6 @@ function AppNavbar() {
           )}
           {token && (
           <>
-            {/* {role  === "user" && ( */}
             {role && role === "user" && (
           <>
            <Nav.Link as={Link} to="/cart">Cart</Nav.Link>

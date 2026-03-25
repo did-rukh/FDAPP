@@ -1,21 +1,18 @@
-
-
 import { useState } from "react";
 import { Container, Form, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import API from "../api/axios";
 import { toast } from "react-toastify";
 
-
 function Register() {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+     email: "",
     password: "",
     phone: "",       
-    role: "user"     
+     role: "user"     
   });
 
   const changeHandler = (e) => {

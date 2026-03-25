@@ -72,12 +72,19 @@ function RestaurantOrders() {
             <h5>Order #{order._id.slice(-6)}</h5>
             <p>Status: {order.status}</p>
 
-            {order.items.map((item) => (
+            {/* {order.items.map((item) => (
               <p key={item._id}>
                 {item.product.name} × {item.quantity}
               </p>
+            ))} */}
+
+            {order.items?.map((item) => (
+              <p key={item._id}>
+                {item.product?.name || "⚠️ Product removed"} × {item.quantity}
+              </p>
             ))}
 
+              
             {/* Status buttons */}
             {order.status === "PLACED" && (
               <Button onClick={() => updateStatus(order._id, "CONFIRMED")} className="me-2">
@@ -103,11 +110,20 @@ function RestaurantOrders() {
                   }
                 >
                   <option value="">Select Delivery Partner</option>
-                  {allDeliveryPartners.map((partner) => (
+
+                  {/* {allDeliveryPartners.map((partner) => (
                     <option key={partner._id} value={partner._id}>
                       {partner.name} ({partner.email})
                     </option>
-                  ))}
+                  ))} */}
+
+                    {allDeliveryPartners.map((partner) => (
+                      <option key={partner._id} value={partner._id}>
+                        {partner?.name || "Unknown"} (
+                        {partner?.email || "No email"})
+                      </option>
+                    ))}
+
                 </Form.Select>
 
                 <Button onClick={() => assignPartner(order._id)}>

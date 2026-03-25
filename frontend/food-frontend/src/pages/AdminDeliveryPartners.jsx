@@ -20,7 +20,6 @@ function AdminDeliveryPartners() {
     fetchPartners();
   }, []);
 
-  // 🔴 BLOCK / UNBLOCK
   const toggleBlock = async (id) => {
     try {
       const res = await API.put(`/admin/toggle-user/${id}`);

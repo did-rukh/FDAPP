@@ -289,8 +289,6 @@ function MyOrders() {
   const [orders, setOrders] = useState([]);
   const [reviewStatus, setReviewStatus] = useState({});
   const [loadingId, setLoadingId] = useState(null);
-
-  // 🔥 NEW STATES (MODAL)
   const [showModal, setShowModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [rating, setRating] = useState("");
@@ -326,7 +324,6 @@ function MyOrders() {
     fetchOrders();
   }, []);
 
-  // 🔥 CANCEL ORDER
   const cancelOrder = async (orderId) => {
     try {
       setLoadingId(orderId);
@@ -343,7 +340,6 @@ function MyOrders() {
     }
   };
 
-  // 🔥 OPEN ADD MODAL
   const addReviewHandler = (orderId) => {
     if (reviewStatus[orderId]) {
       toast.error("You already reviewed this order");
@@ -357,7 +353,6 @@ function MyOrders() {
     setShowModal(true);
   };
 
-  // 🔥 OPEN EDIT MODAL
   const editReviewHandler = async (orderId) => {
     try {
       const res = await API.get(`/reviews/order/${orderId}`);
@@ -471,7 +466,6 @@ function MyOrders() {
         </Card>
       ))}
 
-      {/* 🔥 MODAL */}
       <Modal show={showModal} onHide={() => setShowModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>

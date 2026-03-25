@@ -32,16 +32,13 @@
 
 
 
-
-
 import { createContext, useState, useEffect } from "react";
-
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ ADD
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -52,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       setRole(storedRole);
     }
 
-    setLoading(false); // ✅ IMPORTANT
+    setLoading(false); 
   }, []);
 
   const login = (token, role) => {
@@ -69,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     setRole(null);
   };
 
-  if (loading) return null; // ✅ PREVENT NULL RENDER
+  if (loading) return null; 
 
   return (
     <AuthContext.Provider value={{ token, role, login, logout }}>

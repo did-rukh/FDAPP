@@ -1,26 +1,24 @@
 import { createContext, useContext, useState } from "react";
+import { toast } from "react-toastify";
 
 const CartContext = createContext();
-
 export const CartProvider = ({ children }) => {
 
   const [cartItems, setCartItems] = useState([]);
-
   const addToCart = (product) => {
-
-      //  ADD THIS CHECK 
-  if (!product.available) {
-    alert(`${product.name} is currently unavailable`);
-    return;
-  }
-
+    
+  // if (!product.available) {
+  //   toast.error(`${product.name} is currently unavailable`);
+  //   return;
+  // }
+  
     setCartItems((prevCart) => {
 
       if (
         prevCart.length > 0 &&
         prevCart[0].restaurant !== product.restaurant
       ) {
-        alert("You can order from only one restaurant at a time.");
+        toast.warning("You can order from only one restaurant at a time.");
         return prevCart;
       }
 
@@ -60,7 +58,6 @@ export const CartProvider = ({ children }) => {
         )
         .filter((item) => item.quantity > 0)
     );
-
   };
 
   const removeFromCart = (id) => {

@@ -23,6 +23,7 @@ function Restaurant() {
         setRestaurant(data);
 
         const productRes = await API.get(`/products?restaurantId=${id}`);
+
         setProducts(productRes.data);
         setLoading(false);
       } catch (error) {
@@ -95,7 +96,6 @@ function Restaurant() {
         ))}
       </Row>
 
-      {/* Reviews Section */}
       <div className="mt-4">
         <RestaurantReviews restaurantId={id} />
       </div>

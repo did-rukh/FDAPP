@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import API from "../api/axios";
 
 function AdminRestaurantMenu() {
-
   const { id } = useParams();
   const [products, setProducts] = useState([]);
 

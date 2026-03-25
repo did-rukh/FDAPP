@@ -9,9 +9,7 @@
 //     console.log("Admin already exists");
 //     return;
 //   }
-
 //   const hashedPassword = await bcrypt.hash("did1234", 10);
-
 //   await User.create({
 //     username: "Super Admin",
 //     email: adminEmail,
@@ -20,13 +18,9 @@
 //     role: "admin",
 //     isVerified: true
 //   });
-
 //   console.log("Admin created successfully");
 // };
-
 // module.exports = createAdmin;
-
-
 
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
@@ -49,12 +43,11 @@ const createAdmin = async () => {
       role: "admin",
       isVerified: true
     });
-
     console.log("Admin created successfully");
   } catch (err) {
     console.error("Error creating admin:", err.message);
   }
 };
-
 module.exports = createAdmin;
+
 

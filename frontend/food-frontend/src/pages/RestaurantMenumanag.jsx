@@ -332,7 +332,6 @@ function RestaurantMenuManag() {
   const [imageFile, setImage] = useState(null); 
   const [loading, setLoading] = useState(false);
 
-  // 🔥 DELETE MODAL STATES
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState(null);
 
@@ -359,7 +358,6 @@ function RestaurantMenuManag() {
     }
   };
 
-  // ✅ ADD PRODUCT
   const handleAddProduct = async (e) => {
     e.preventDefault();
     
@@ -383,7 +381,7 @@ function RestaurantMenuManag() {
       await API.post("/products", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${localStorage.getItem("token")}`, 
+          // Authorization: `Bearer ${localStorage.getItem("token")}`, 
         },
       });
 
@@ -404,7 +402,6 @@ function RestaurantMenuManag() {
     }
   };
 
-  // ✅ TOGGLE AVAILABILITY
   const toggleAvailability = async (id) => {
     try {
       const res = await API.put(`/products/toggle/${id}`, {}, {
@@ -427,13 +424,12 @@ function RestaurantMenuManag() {
     }
   };
 
-  // ✅ OPEN DELETE MODAL
   const deleteProduct = (id) => {
     setSelectedProductId(id);
     setShowDeleteModal(true);
   };
 
-  // ✅ CONFIRM DELETE
+  
   const confirmDelete = async () => {
     try {
       const res = await API.delete(`/products/delete/${selectedProductId}`, {
@@ -465,7 +461,6 @@ function RestaurantMenuManag() {
     <Container className="mt-4">
       <h2 className="mb-4">Manage Menu</h2>
 
-      {/* ADD PRODUCT */}
       <Card className="mb-4">
         <Card.Body>
           <h4>Add New Menu Item</h4>
@@ -618,7 +613,6 @@ function RestaurantMenuManag() {
         ))
       )}
 
-      {/* 🔥 DELETE MODAL */}
       <Modal show={showDeleteModal} onHide={() => setShowDeleteModal(false)} centered>
         <Modal.Header closeButton>
           <Modal.Title>Confirm Delete</Modal.Title>

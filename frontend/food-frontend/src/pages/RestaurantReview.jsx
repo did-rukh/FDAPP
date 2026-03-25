@@ -61,32 +61,60 @@ function RestaurantReviews({ restaurantId: propRestaurantId }) {
   const [restaurantId, setRestaurantId] = useState(propRestaurantId || null);
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       setLoading(true);
+
+  //       let id = restaurantId;
+
+  //       // 🔥 If no prop, fetch automatically
+  //       if (!id) {
+  //         const res = await API.get("/restaurants/my-restaurant");
+  //         id = res.data._id;
+  //         setRestaurantId(id);
+  //       }
+
+  //       const reviewRes = await API.get(`/reviews/restaurant/${id}`);
+  //       setReviews(reviewRes.data);
+
+  //     } catch (error) {
+  //       console.error("Error:", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   loadData();
+  // }, [restaurantId]);      //old     
+
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        setLoading(true);
+  const loadData = async () => {
+    try {
+      setLoading(true);
 
-        let id = restaurantId;
+      let id = propRestaurantId;
 
-        // 🔥 If no prop, fetch automatically
-        if (!id) {
-          const res = await API.get("/restaurants/my-restaurant");
-          id = res.data._id;
-          setRestaurantId(id);
-        }
-
-        const reviewRes = await API.get(`/reviews/restaurant/${id}`);
-        setReviews(reviewRes.data);
-
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
+      if (!id) {
+        const res = await API.get("/restaurants/my-restaurant");
+        id = res.data._id;
       }
-    };
 
-    loadData();
-  }, [restaurantId]);
+      const reviewRes = await API.get(`/reviews/restaurant/${id}`);
+      setReviews(reviewRes.data);
+
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  loadData();
+}, [propRestaurantId]);
+
+
 
   if (loading) return <p>Loading reviews...</p>;
   if (reviews.length === 0) return <p>No reviews yet</p>;

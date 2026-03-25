@@ -150,7 +150,7 @@ function App() {
             }
           />
 
-          <Route path="/Restaurant/reviews" element={
+          <Route path="/restaurant/reviews" element={                      //small cahnge up to lo
                      <PrivateRoute allowedRoles={["restaurant"]}>
                       <RestaurantReview />
                      </PrivateRoute>
@@ -203,7 +203,13 @@ function App() {
             }
           />
 
-          <Route path="/admin/delivery" element={<AdminDeliveryPartners />} />
+          {/* <Route path="/admin/delivery" element={<AdminDeliveryPartners />} /> */}
+          <Route
+  path="/admin/delivery"
+  element={
+    <PrivateRoute allowedRoles={["admin"]}>
+      <AdminDeliveryPartners />
+    </PrivateRoute>}/>
 
         </Routes>
       </main>

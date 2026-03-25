@@ -19,7 +19,6 @@ router.post(
   createProduct
 );
 
-// ✅ DELETE PRODUCT
 router.delete(
   "/delete/:id",
   protect,
@@ -27,7 +26,6 @@ router.delete(
   deleteProduct
 );
 
-// ✅ TOGGLE AVAILABILITY
 router.put(
   "/toggle/:id",
   protect,

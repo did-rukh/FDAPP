@@ -133,7 +133,6 @@ function Cart() {
   const placeOrder = async () => {
     try {
       if (cartItems.length === 0) {
-        // alert("Cart is empty");
         toast.warning("Cart is empty");
         return;
       }
@@ -156,12 +155,10 @@ function Cart() {
         })),
       });
 
-      // alert("Order placed successfully!");
       toast.success("Order placed successfully 🎉");
       setCartItems([]);
 
     } catch (error) {
-      // alert(error.response?.data?.message || "Order failed");
       toast.error(error.response?.data?.message || "Order failed");
     } finally {
       setLoading(false);

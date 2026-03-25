@@ -24,11 +24,9 @@ function AdminRestaurantReviews() {
         console.error("Review fetch error:", error);
 
       } finally {
-
         setLoading(false);
 
       }
-
     };
 
     fetchReviews();

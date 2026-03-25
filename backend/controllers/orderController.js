@@ -23,6 +23,16 @@ exports.placeOrder = async (req, res) => {
     }
 
     const restaurantId = firstProduct.restaurant.toString();
+    // ✅ BLOCK CHECK ADDED
+const restaurant = await Restaurant.findById(restaurantId);
+
+if (!restaurant || restaurant.isBlocked) {
+  return res.status(403).json({
+    message: "This restaurant is currently blocked"
+  });
+}
+
+
     let totalPrice = 0;
     //  check all product
     for (let item of items) {
@@ -216,6 +226,38 @@ exports.cancelOrderByUser = async (req, res) => {
 };
 
 
+
+
+
+// exports.assignDeliveryPartner = async (req, res) => {
+//   try {
+//     const { orderId } = req.params;
+//     const { deliveryPartnerId } = req.body;
+
+//     const order = await Order.findById(orderId);
+
+//     if (!order) {
+//       return res.status(404).json({ message: "Order not found" });
+//     }
+
+//     if (order.status !== "PREPARING") {
+//       return res.status(400).json({
+//         message: "Order must be PREPARING to assign delivery partner"
+//       });
+//     }
+
+//     order.deliveryPartner = deliveryPartnerId;
+//     order.status = "ASSIGNED";
+
+//     await order.save();
+
+//     res.json(order);
+
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error" });
+//   }
+// };
+
 exports.assignDeliveryPartner = async (req, res) => {
   try {
     const { orderId } = req.params;
@@ -233,6 +275,17 @@ exports.assignDeliveryPartner = async (req, res) => {
       });
     }
 
+    // ✅ ADD THIS BLOCK CHECK
+    const User = require("../models/User");
+
+    const deliveryPartner = await User.findById(deliveryPartnerId);
+
+    if (!deliveryPartner || deliveryPartner.isBlocked) {
+      return res.status(403).json({
+        message: "Delivery partner is blocked"
+      });
+    }
+
     order.deliveryPartner = deliveryPartnerId;
     order.status = "ASSIGNED";
 
@@ -244,6 +297,9 @@ exports.assignDeliveryPartner = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+
+
 
 
 
