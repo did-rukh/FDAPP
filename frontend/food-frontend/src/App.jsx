@@ -1,6 +1,3 @@
-
-
-
 // import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import AppNavbar from "./components/Navbar";
 // import PrivateRoute from "./components/PrivateRoute";
@@ -55,12 +52,7 @@
 //     </BrowserRouter>
 //   );
 // }
-
 // export default App;   // old code updated code nxt
-
-
-
-
 
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -81,9 +73,7 @@ import RestaurantOrders from "./pages/RestaurantOrders";
 import RestaurantMenuManag from "./pages/RestaurantMenumanag";
 import RestaurantReview from "./pages/RestaurantReview";
 
-
 import DeliveryOrders from "./pages/DeliveryOrders";
-
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminRestaurants from "./pages/AdminRestaurants";
 import AdminRestaurantMenu from "./pages/AdminRestaurantMenu";
@@ -129,7 +119,7 @@ function App() {
                 <MyOrder />
               </PrivateRoute>
             }
-          />
+            />
 
           {/* RESTAURANT ROUTES */}
           <Route
@@ -140,17 +130,16 @@ function App() {
               </PrivateRoute>
             }
           />
-
           <Route
             path="/restaurant/menu"
             element={
               <PrivateRoute allowedRoles={["restaurant"]}>
                 <RestaurantMenuManag />
               </PrivateRoute>
-            }
-          />
+            }/>
 
-          <Route path="/restaurant/reviews" element={                      //small cahnge up to lo
+
+          <Route path="/restaurant/reviews" element={                //small cahnge up to lo
                      <PrivateRoute allowedRoles={["restaurant"]}>
                       <RestaurantReview />
                      </PrivateRoute>

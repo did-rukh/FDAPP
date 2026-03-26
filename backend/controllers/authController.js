@@ -31,11 +31,9 @@ exports.register = async (req, res) => {
     await newUser.save();
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "24h" });
-    // const verifyURL = `http://localhost:5000/api/auth/verify/${token}`;       //used to run in vs code crt  code
+    const verifyURL = `http://localhost:5000/api/auth/verify/${token}`;       //used to run in vs code crt  code
 
-    const verifyURL = `${process.env.FRONTEND_URL || "http://localhost:5173"}/verify/${token}`;
-
-
+    // const verifyURL = `${process.env.FRONTEND_URL || "http://localhost:5173"}/verify/${token}`;
 
     // const verifyURL = `${process.env.BACKEND_URL}/api/auth/verify/${token}`;   // new one  
     // const verifyURL = `${process.env.BACKEND_URL}/api/auth/verify/${token}`;

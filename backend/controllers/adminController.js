@@ -1,10 +1,9 @@
 const User = require("../models/User");
 const Restaurant = require("../models/Restaurant");
 const bcrypt = require("bcryptjs");
-
 exports.addRestaurant = async (req, res) => {
   try {
-    const {
+      const {
       name,
       email,
       password,
@@ -14,7 +13,7 @@ exports.addRestaurant = async (req, res) => {
       state,
       zip
     } = req.body;
-
+  
     if (!name || !email || !password || !phone || !street || !city || !state || !zip) {
       return res.status(400).json({
         message: "All required fields must be filled"
@@ -67,7 +66,6 @@ exports.addRestaurant = async (req, res) => {
     });
   }
 };
-
 exports.createDelivery = async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
@@ -113,7 +111,6 @@ exports.getDeliveryPartners = async (req, res) => {
   }
 };
 
-
 exports.toggleRestaurantBlock = async (req, res) => {
   try {
     const restaurant = await Restaurant.findById(req.params.id);
@@ -137,7 +134,7 @@ exports.toggleRestaurantBlock = async (req, res) => {
   }
 };
 
-exports.toggleUserBlock = async (req, res) => {
+ exports.toggleUserBlock = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -163,3 +160,4 @@ exports.toggleUserBlock = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }; 
+

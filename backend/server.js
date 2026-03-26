@@ -34,55 +34,12 @@ app.use(cookieParser());
 // }));
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// app.use(cors({
-//   origin: "http://localhost:5173",   // this is real code work in vscode 
-//   credentials: true
-// }));
-
-
-
-
-// ---------------- CORS CONFIG ----------------
-// Allow frontend localhost and optional deployed frontend
-const allowedOrigins = [
-  "http://localhost:5173",                   // local frontend
-  process.env.FRONTEND_URL                    // deployed frontend (set in Render env vars)
-].filter(Boolean);
-
 app.use(cors({
-  origin: function(origin, callback) {
-    // allow requests with no origin like Postman
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
-      return callback(new Error(msg), false);
-    }
-    return callback(null, true);
-  },
+  origin: "http://localhost:5173",   
   credentials: true
 }));
 
 
-
-
-
-// Optional logger
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.url}`);
   next();

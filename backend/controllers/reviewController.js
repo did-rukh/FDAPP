@@ -2,7 +2,6 @@ const Review = require("../models/Review");
 const Order = require("../models/order");
 const Restaurant = require("../models/Restaurant");
 
- 
 const addReview = async (req, res) => {
   try {
   //   const { rating, comment } = req.body;
@@ -35,7 +34,7 @@ const addReview = async (req, res) => {
       });
     }
 
-    // Must be order owner
+    
     if (order.user.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized" });
     }
@@ -100,7 +99,7 @@ const getRestaurantReviews = async (req, res) => {
 };
 
 
-// ✏️ UPDATE REVIEW
+//  UPDATE REVIEW
 const updateReview = async (req, res) => {
   try {
     const { comment } = req.body;
@@ -112,21 +111,21 @@ const updateReview = async (req, res) => {
       return res.status(404).json({ message: "Review not found" });
     }
 
-    // 🔒 Only same user can edit
+    //  Only same user can edit
     if (review.user.toString() !== req.user.id) {
       return res.status(403).json({
         message: "Not authorized to edit this review"
       });
     }
 
-    // ✅ VALIDATION (FIX ADDED)
+    // VALIDATION (FIX ADDED)
     if (rating && (isNaN(rating) || rating < 1 || rating > 5)) {
       return res.status(400).json({
         message: "Rating must be between 1 and 5"
       });
     }
 
-    // ✅ Update fields
+    // Update fields
     if (rating) review.rating = rating;
     if (comment) review.comment = comment;
 
@@ -144,7 +143,7 @@ const updateReview = async (req, res) => {
 };
 
 
-// // ✏️ UPDATE REVIEW (NEW)
+// // UPDATE REVIEW (NEW)
 // const updateReview = async (req, res) => {
 //   try {
 //     const { rating, comment } = req.body;
@@ -155,12 +154,12 @@ const updateReview = async (req, res) => {
 //       return res.status(404).json({ message: "Review not found" });
 //     }
 
-//     // 🔒 Only same user can edit
+//     //  Only same user can edit
 //     if (review.user.toString() !== req.user.id) {
 //       return res.status(403).json({ message: "Not authorized to edit this review" });
 //     }
 
-//     // ✅ Update values
+//     //  Update values
 //     review.rating = rating || review.rating;
 //     review.comment = comment || review.comment;
 
