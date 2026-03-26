@@ -28,8 +28,13 @@ app.use(cookieParser());
 //   credentials: true
 // }));
 
+// app.use(cors({
+//   origin: process.env.FRONTEND_URL, // frontend URL from .env
+//   credentials: true
+// }));
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL, // frontend URL from .env
+  origin: "http://localhost:5173",
   credentials: true
 }));
 
