@@ -22,6 +22,9 @@
 // };
 // module.exports = createAdmin;
 
+
+
+
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
