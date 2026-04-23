@@ -86,6 +86,9 @@ exports.login = async (req, res) => {
     if (!isMatch) return res.status(400).json("Incorrect password");
 
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    console.log("Generated OTP:", otp);
+console.log("Sending OTP to:", user.email);    // new code
+
     user.otp = otp;
     user.otpExpiry = Date.now() + 10 * 60 * 1000; 
     await user.save();
@@ -99,7 +102,8 @@ exports.login = async (req, res) => {
 
     res.status(200).json({ message: "OTP sent successfully" });
   } catch (err) {
-    console.error("Error sending OTP:", err);
+    // console.error("Error sending OTP:", err);
+    console.error("OTP ERROR FULL:", err);
     res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -123,12 +127,22 @@ exports.verifyOTP = async (req, res) => {
     user.refreshToken = refreshToken;
     await user.save();
 
+    // res.cookie("refreshToken", refreshToken, {
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    //   secure: false,
+    //   maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
     res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: false,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+  httpOnly: true,
+  sameSite: "None",
+  secure: true,
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+ });
+
+
+
+
 
     res.status(200).json({ message: "Login successful", accessToken , role: user.role   });
   } catch (err) {
@@ -167,10 +181,16 @@ exports.logout = async (req, res) => {
       }
     }
 
-    res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax", secure: false });
+    // res.clearCookie("refreshToken", { httpOnly: true, sameSite: "lax", secure: false });
+    res.clearCookie("refreshToken", {
+  httpOnly: true,
+  sameSite: "None",
+  secure: true
+});
+
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
-  }
+  } 
 };
