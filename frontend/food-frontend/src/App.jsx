@@ -101,6 +101,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/verify-otp" element={<VerifyOTP />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/verify/:token" element={<VerifyOTP />} />
 
           {/* USER ROUTES */}
           <Route
